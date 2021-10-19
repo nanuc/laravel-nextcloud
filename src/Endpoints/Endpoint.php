@@ -4,6 +4,7 @@ namespace Nanuc\Nextcloud\Endpoints;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Nanuc\Nextcloud\ResponseParsers\ResponseParser;
 use Nanuc\Nextcloud\ResponseParsers\UserListParser;
 
@@ -12,7 +13,6 @@ class Endpoint
     protected function get($uri, $parserClass = ResponseParser::class)
     {
         return $this->request('get', $uri, null, $parserClass);
-        return $this->parseResponse($this->client->get($this->getUrl($uri)), $parserClass);
     }
 
     protected function post($uri, $data = [], $parserClass = ResponseParser::class)
@@ -32,7 +32,22 @@ class Endpoint
 
     protected function request($method, $uri, $data, $parserClass)
     {
-        return $this->parseResponse($this->getClient()->$method($this->getUrl($uri), $data), $parserClass);
+        $time = microtime(true);
+        $response = $this->getClient()->$method($this->getUrl($uri), $data);
+        $time = microtime(true) - $time;
+
+        if(config('laravel-nextcloud.logging')) {
+            Log::channel(config('laravel-nextcloud.logging-channel'))
+                ->info(
+                    'Method:   ' . $method . PHP_EOL .
+                    'URI:     ' . $this->getUrl($uri) . PHP_EOL .
+                    'Data:    ' . json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL .
+                    'Runtime: ' . $time . PHP_EOL .
+                    'Response: ' . $response->body()
+                );
+        }
+
+        return $this->parseResponse($response, $parserClass);
     }
     
     private function getUrl($uri)
