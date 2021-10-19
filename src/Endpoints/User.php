@@ -23,7 +23,7 @@ class User extends Endpoint
         return $this->get('users', UserListParser::class);
     }
 
-    public function create($userId, $password, $options = [])
+    public function create($userId, $password = null, $options = [])
     {
         $this->post('users', array_merge(['userid' => $userId, 'password' => $password], $options));
     }
