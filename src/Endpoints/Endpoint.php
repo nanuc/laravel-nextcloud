@@ -38,12 +38,12 @@ class Endpoint
 
         if(config('laravel-nextcloud.logging')) {
             Log::channel(config('laravel-nextcloud.logging-channel'))
-                ->info(
+                ->info(PHP_EOL.
                     'Method:   ' . $method . PHP_EOL .
-                    'URI:     ' . $this->getUrl($uri) . PHP_EOL .
-                    'Data:    ' . json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL .
-                    'Runtime: ' . $time . PHP_EOL .
-                    'Response: ' . $response->body()
+                    'URI:      ' . $this->getUrl($uri) . PHP_EOL .
+                    'Data:     ' . json_encode($data, JSON_PRETTY_PRINT) . PHP_EOL .
+                    'Runtime:  ' . $time . PHP_EOL .
+                    'Response: ' . PHP_EOL . $response->body()
                 );
         }
 
