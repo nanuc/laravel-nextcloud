@@ -5,6 +5,7 @@ namespace Nanuc\Nextcloud\Endpoints;
 use Illuminate\Support\Str;
 use Nanuc\Nextcloud\ResponseParsers\GroupListParser;
 use Nanuc\Nextcloud\ResponseParsers\UserListParser;
+use Nanuc\Nextcloud\ResponseParsers\UserParser;
 
 class User extends Endpoint
 {
@@ -15,7 +16,7 @@ class User extends Endpoint
 
     public function user($userId)
     {
-        return $this->get('users/'.$userId);
+        return $this->get('users/'.$userId, UserParser::class);
     }
 
     public function users()
