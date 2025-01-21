@@ -32,4 +32,9 @@ class Group extends Endpoint
     {
         $this->delete('groups/'.$groupId);
     }
+
+    public function update($groupId, $key, $value)
+    {
+        $this->put('groups/'.$groupId, compact('key', 'value'));
+    }
 }
