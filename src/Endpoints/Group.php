@@ -15,7 +15,7 @@ class Group extends Endpoint
 
     public function group($groupId)
     {
-        return $this->get('groups/'.$groupId);
+        return $this->get('groups/'.$groupId, UserListParser::class);
     }
 
     public function groups()
